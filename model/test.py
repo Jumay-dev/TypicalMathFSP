@@ -1,12 +1,6 @@
 import sys
 
-dict = {
-    "first": 3,
-    "second": 5
-}
+variable = 10
 
-print(dict)
-# val = sys.argv[0]
-
-# val**
-# print('sdf')
+print(variable)
+sys.stdout.flush()
