@@ -16,15 +16,15 @@ debug = true;
 
 // Start values for example
 let SVALUE = {
-  x: '1',
-  y: '2',
-  z: '3',
-  vx: '4',
-  vy: '5',
-  vz: '7',
-  tstart: '8',
-  dt: '9',
-  tend: '10'
+  vx: 0.593397,
+  vy: 5.793711,
+  vz: 4.948645,
+  x: 4226.800251,
+  y: 3085.944251,
+  z: -4321.376266,
+  tstart: 0,
+  dt: 0.1,
+  tend: 100
 }
 
 
@@ -44,19 +44,22 @@ app.post('/api/contacts', (req, res) => {
   debug && console.log('POST request recieved')
   let val = {...req.body}
   SVALUE = val
+  console.log(SVALUE)
 
-  async function handleValues(SVALUE) { 
-    result = await setTimeout(anyF, 1000)
-    
-    function anyF() {
-      const mul = 2;
-      const pythonProcess = spawn('python',["./model/test.py", mul]);
+  async function handleValues(SVALUE) {
+    result = await function pythonCall(SVALUE) {
+      console.log('Sending data: ', SVALUE)
+      const pythonProcess = spawn('python',["./model/main.py", JSON.stringify(SVALUE)]);
       pythonProcess.stdout.on('data', (data) => {
-        resValue = data.toString();
+        resValue = data.toString()
         console.log("Data from py script", resValue);
         res.status(200).json(resValue);
       });
-    }
+    }(val)
+    
+    
+
+
   }
 
   handleValues()

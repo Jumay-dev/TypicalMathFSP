@@ -1,7 +1,12 @@
 import sys
-mul = float(sys.argv[1])
+import time # for delay, simulating of backend answer
+import json
 
-variable = 10 * mul
+mul = sys.argv[1]
+parsed = json.loads(mul)
 
-print(variable)
+
+# time.sleep(3) # 3 sec delay
+
+print(parsed['x'])
 sys.stdout.flush()

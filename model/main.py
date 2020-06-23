@@ -1,5 +1,6 @@
 import os
 import sys
+import json
 import math
 import consts
 import matplotlib.pyplot as plt
@@ -118,18 +119,20 @@ def Fomegap(omegap, sigma, Msumm, OMEGA, Jmatr_1, Idm, Jmatr):
 
 #===============================Рассчетная часть===========================
     #Начальные параметры
-vx = 0.593397
-vy = 5.793711
-vz = 4.948645
-x = 4226.800251 
-y = 3085.944251
-z = -4321.376266
-# vx = sys.argv[4]
-# vy = sys.argv[5]
-# vz = sys.argv[6]
-# x = sys.argv[1] 
-# y = sys.argv[2]
-# z = sys.argv[3]
+
+var_l = json.loads(sys.argv[1]) # JSON values from API
+# vx = 0.593397
+# vy = 5.793711
+# vz = 4.948645
+# x = 4226.800251 
+# y = 3085.944251
+# z = -4321.376266
+vx = float(var_l['vx'])
+vy = float(var_l['vy'])
+vz = float(var_l['vz'])
+x = float(var_l['x']) 
+y = float(var_l['y'])
+z = float(var_l['z'])
 #-----------
 quart = np.array([0.632866, -0.1826981, 0.3653963, -0.657713], float) #p,x,y,z
 omegap = np.array([0.0, 0.00005, 0.000006, -0.00005], float) #p,x,y,z
@@ -145,12 +148,12 @@ Kp = 0.005
 Kd = 0.3
 O = 0
 OMEGA = np.array([0, 0, 0], float) #x, y, z
-t = 0.0 #начальное время
-dt = 0.1 #шаг
-tend = 2000 #время интегрирования
-# t = sys.argv[7]
-# dt = sys.argv[8]
-# tend = [9]
+# t = 0.0 #начальное время
+# dt = 0.1 #шаг
+# tend = 2000 #время интегрирования
+t = float(var_l['tstart'])
+dt = float(var_l['dt'])
+tend = float(var_l['tend'])
 
 Jmatr = np.array([[0, 0, 0],
                 [0, 0, 0],
@@ -297,12 +300,12 @@ while t <= tend:
     omegap3d = omegap3d + 1.0 / 6.0 * (k1 + 2 * k2 + 2 * k3 + k4)
     omegap = np.array([omegap[0], omegap3d[0], omegap3d[1], omegap3d[2]])
     
-    print('=======================', t, '======================')
-    print('r_j2000 = ', r_j2000_f.vec)
-    print('quart = ', quart)
-    # print('sigma = ', sigma)
-    print('Omega = ', OMEGA)
-    print('omegap = ', omegap)
+    # print('=======================', t, '======================')
+    # print('r_j2000 = ', r_j2000_f.vec)
+    # print('quart = ', quart)
+    # # print('sigma = ', sigma)
+    # print('Omega = ', OMEGA)
+    # print('omegap = ', omegap)
     
     #================plot point=========================
     # plt.scatter(r_j2000[0], t, color='r')
@@ -339,83 +342,86 @@ while t <= tend:
     
 f.close()
 
-#===========================PLOTTING==========================
-pylab.figure (1)
-pylab.plot(r_j2000_x, t_going, label = "x")
-plt.title('Изменение X радиус-вектора КА по времени')
-plt.xlabel('X, км')
-plt.ylabel('Время, с')
-pylab.grid(True)
-save(name='r_j2000_x', fmt='png')
+print('END')
+sys.stdout.flush()
+# #===========================PLOTTING==========================
+# pylab.figure (1)
+# pylab.plot(r_j2000_x, t_going, label = "x")
+# plt.title('Изменение X радиус-вектора КА по времени')
+# plt.xlabel('X, км')
+# plt.ylabel('Время, с')
+# pylab.grid(True)
+# save(name='r_j2000_x', fmt='png')
 
-pylab.figure (2)
-pylab.plot (r_j2000_y, t_going, label = "y")
-plt.title('Изменение Y радиус-вектора КА по времени')
-plt.xlabel('Y, км')
-plt.ylabel('Время, с')
-pylab.grid(True)
-save(name='r_j2000_y', fmt='png')
+# pylab.figure (2)
+# pylab.plot (r_j2000_y, t_going, label = "y")
+# plt.title('Изменение Y радиус-вектора КА по времени')
+# plt.xlabel('Y, км')
+# plt.ylabel('Время, с')
+# pylab.grid(True)
+# save(name='r_j2000_y', fmt='png')
 
-pylab.figure (3)
-pylab.plot(r_j2000_z, t_going, label = "z")
-plt.title('Изменение Z радиус-вектора КА по времени')
-plt.xlabel('Z, км')
-plt.ylabel('Время, с')
-pylab.grid(True)
-save(name='r_j2000_z', fmt='png')
+# pylab.figure (3)
+# pylab.plot(r_j2000_z, t_going, label = "z")
+# plt.title('Изменение Z радиус-вектора КА по времени')
+# plt.xlabel('Z, км')
+# plt.ylabel('Время, с')
+# pylab.grid(True)
+# save(name='r_j2000_z', fmt='png')
 
-pylab.figure (4) # угловая скорость КА
-pylab.plot(omegap_x, t_going, label = "omx")
-plt.title('Угловая скорость КА по оси X')
-plt.xlabel('Om, рад/с')
-plt.ylabel('Время, с')
-pylab.grid(True)
-save(name='omegap_x', fmt='png')
+# pylab.figure (4) # угловая скорость КА
+# pylab.plot(omegap_x, t_going, label = "omx")
+# plt.title('Угловая скорость КА по оси X')
+# plt.xlabel('Om, рад/с')
+# plt.ylabel('Время, с')
+# pylab.grid(True)
+# save(name='omegap_x', fmt='png')
 
-pylab.figure (5)
-pylab.plot(omegap_y, t_going, label = "omy")
-plt.title('Угловая скорость КА по оси Y')
-plt.xlabel('Om, рад/с')
-plt.ylabel('Время, с')
-pylab.grid(True)
-save(name='omegap_z', fmt='png')
+# pylab.figure (5)
+# pylab.plot(omegap_y, t_going, label = "omy")
+# plt.title('Угловая скорость КА по оси Y')
+# plt.xlabel('Om, рад/с')
+# plt.ylabel('Время, с')
+# pylab.grid(True)
+# save(name='omegap_z', fmt='png')
 
-pylab.figure (6)
-pylab.plot(omegap_z, t_going, label = "omz")
-plt.title('Угловая скорость КА по оси X')
-plt.xlabel('Om, рад/с')
-plt.ylabel('Время, с')
-pylab.grid(True)
-save(name='omegap_z', fmt='png')
+# pylab.figure (6)
+# pylab.plot(omegap_z, t_going, label = "omz")
+# plt.title('Угловая скорость КА по оси X')
+# plt.xlabel('Om, рад/с')
+# plt.ylabel('Время, с')
+# pylab.grid(True)
+# save(name='omegap_z', fmt='png')
 
-pylab.figure (7) # угловая скорость ДМ
-pylab.plot(OmegA_x, t_going, label = "Omx")
-plt.title('Угловая скорость ДМ по оси X')
-plt.xlabel('Om, рад/с')
-plt.ylabel('Время, с')
-pylab.grid(True)
-save(name='OmegA_x', fmt='png')
+# pylab.figure (7) # угловая скорость ДМ
+# pylab.plot(OmegA_x, t_going, label = "Omx")
+# plt.title('Угловая скорость ДМ по оси X')
+# plt.xlabel('Om, рад/с')
+# plt.ylabel('Время, с')
+# pylab.grid(True)
+# save(name='OmegA_x', fmt='png')
 
-pylab.figure (8)
-pylab.plot(OmegA_y, t_going, label = "Omy")
-plt.title('Угловая скорость ДМ по оси Y')
-plt.xlabel('Om, рад/с')
-plt.ylabel('Время, с')
-pylab.grid(True)
-save(name='OmegA_y', fmt='png')
+# pylab.figure (8)
+# pylab.plot(OmegA_y, t_going, label = "Omy")
+# plt.title('Угловая скорость ДМ по оси Y')
+# plt.xlabel('Om, рад/с')
+# plt.ylabel('Время, с')
+# pylab.grid(True)
+# save(name='OmegA_y', fmt='png')
 
-pylab.figure (9)
-pylab.plot(OmegA_z, t_going, label = "Omz")
-plt.title('Угловая скорость ДМ по оси X')
-plt.xlabel('Om, рад/с')
-plt.ylabel('Время, с')
-pylab.grid(True)
-save(name='OmegA_z', fmt='png')
+# pylab.figure (9)
+# pylab.plot(OmegA_z, t_going, label = "Omz")
+# plt.title('Угловая скорость ДМ по оси X')
+# plt.xlabel('Om, рад/с')
+# plt.ylabel('Время, с')
+# pylab.grid(True)
+# save(name='OmegA_z', fmt='png')
 
-fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
-ax.plot(r_j2000_x, r_j2000_y, r_j2000_z, label='parametric curve')
+# fig = plt.figure()
+# ax = fig.add_subplot(111, projection='3d')
+# ax.plot(r_j2000_x, r_j2000_y, r_j2000_z, label='parametric curve')
 
-# print('%2.2'.format(x))
+# # print('%2.2'.format(x))
 
-pylab.show()
+# pylab.show()
+
