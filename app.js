@@ -43,17 +43,18 @@ app.get('/api/contacts', (req, res) => {
 app.post('/api/contacts', (req, res) => {
   debug && console.log('POST request recieved')
   let val = {...req.body}
+  console.log('from front: ', val)
   SVALUE = val
-  console.log(SVALUE)
 
   async function handleValues(SVALUE) {
-    result = await function pythonCall(SVALUE) {
-      console.log('Sending data: ', SVALUE)
+    result = function pythonCall(SVALUE) {
+      console.log('Sending to py: ', SVALUE)
       const pythonProcess = spawn('python',["./model/main.py", JSON.stringify(SVALUE)]);
       pythonProcess.stdout.on('data', (data) => {
-        resValue = data.toString()
-        console.log("Data from py script", resValue);
-        res.status(200).json(resValue);
+        // resValue = data.toString().split("'").join('"').split(" array(").join('"').split(")").join('"') //Лютый хардокд, потом переписать
+        resValue = JSON.parse(data);
+        console.log("Data from py: ", resValue);
+        res.status(200).json(JSON.stringify(resValue));
       });
     }(val)
     

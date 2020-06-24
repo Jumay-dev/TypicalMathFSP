@@ -31,7 +31,8 @@ new Vue({
   methods: {
     async createContact() {
       const handledValues = await request('/api/contacts', 'POST', this.form)
-      console.log(handledValues)
+      console.log('Sending data: ', this.form)
+      console.log(JSON.parse(handledValues))
     }
   },
 

@@ -342,7 +342,20 @@ while t <= tend:
     
 f.close()
 
-print('END')
+results_l = {
+    "r_j2000_x": r_j2000_x.tolist(),
+    "r_j2000_y": r_j2000_y.tolist(),
+    "r_j2000_z": r_j2000_z.tolist(),
+    "OmegA_x": OmegA_x.tolist(),
+    "OmegA_y": OmegA_y.tolist(),
+    "OmegA_z": OmegA_z.tolist(),
+    "omegap_x": omegap_x.tolist(),
+    "omegap_y": omegap_y.tolist(),
+    "omegap_z": omegap_z.tolist(),
+    "t_going": t_going.tolist()
+}
+sending_res = json.dumps(results_l)
+print(sending_res)
 sys.stdout.flush()
 # #===========================PLOTTING==========================
 # pylab.figure (1)
