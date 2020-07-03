@@ -117,6 +117,32 @@ def Fomegap(omegap, sigma, Msumm, OMEGA, Jmatr_1, Idm, Jmatr):
     res = np.dot(Jmatr_1, (Msumm - (VxV(omegap, (np.dot(Jmatr, omegap) + np.dot(Idm, OMEGA)))) + sigma))
     return res
 
+
+#Ограничение на размер массива(списка) для исходящего JSON
+def listLimit(resList, limit):
+    if len(resList) <= limit:
+        return resList
+    
+    if len(resList) % limit == 0:
+        res = []
+        i = 0
+        step = len(resList) / limit
+        while i < len(resList):
+            res.append(resList[i])
+            i += step
+        return res
+
+    else:
+        res = []
+        i = 0
+        step = len(resList) // limit
+        while i < (len(resList) - len(resList) % limit) - step:
+            res.append(resList[i])
+            i += step
+        res.append(resList[-1])
+        return res
+
+
 #===============================Рассчетная часть===========================
     #Начальные параметры
 
@@ -133,6 +159,7 @@ vz = float(var_l['vz'])
 x = float(var_l['x']) 
 y = float(var_l['y'])
 z = float(var_l['z'])
+limit = 20
 #-----------
 quart = np.array([0.632866, -0.1826981, 0.3653963, -0.657713], float) #p,x,y,z
 omegap = np.array([0.0, 0.00005, 0.000006, -0.00005], float) #p,x,y,z
@@ -323,7 +350,7 @@ while t <= tend:
 
 
     
-    t_going = np.append(t_going, t)
+    t_going = np.append(t_going, round(t,1))
     #===================================================
     f.write(str(t))
     f.write(' ')
@@ -343,16 +370,16 @@ while t <= tend:
 f.close()
 
 results_l = {
-    "r_j2000_x": r_j2000_x.tolist(),
-    "r_j2000_y": r_j2000_y.tolist(),
-    "r_j2000_z": r_j2000_z.tolist(),
-    "OmegA_x": OmegA_x.tolist(),
-    "OmegA_y": OmegA_y.tolist(),
-    "OmegA_z": OmegA_z.tolist(),
-    "omegap_x": omegap_x.tolist(),
-    "omegap_y": omegap_y.tolist(),
-    "omegap_z": omegap_z.tolist(),
-    "t_going": t_going.tolist()
+    "r_j2000_x": listLimit(r_j2000_x.tolist(), limit),
+    "r_j2000_y": listLimit(r_j2000_y.tolist(), limit),
+    "r_j2000_z": listLimit(r_j2000_z.tolist(), limit),
+    "OmegA_x": listLimit(OmegA_x.tolist(), limit),
+    "OmegA_y": listLimit(OmegA_y.tolist(), limit),
+    "OmegA_z": listLimit(OmegA_z.tolist(), limit),
+    "omegap_x": listLimit(omegap_x.tolist(), limit),
+    "omegap_y": listLimit(omegap_y.tolist(), limit),
+    "omegap_z": listLimit(omegap_z.tolist(), limit),
+    "t_going": listLimit(t_going.tolist(), limit)
 }
 sending_res = json.dumps(results_l)
 print(sending_res)
