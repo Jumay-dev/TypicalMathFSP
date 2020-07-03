@@ -26,7 +26,7 @@ async function main(){
 
 main().catch(console.error);
 
-app.use(cors({origin: '83.220.239.91'}));
+app.use(cors({origin: 'http://83.220.239.91'}));
 
 //Python connection modules
 const spawn = require("child_process").spawn;
