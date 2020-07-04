@@ -4,6 +4,12 @@ const { json } = require('express')
 const app = express()
 var cors = require('cors')
 
+app.use(cors(
+  {
+    origin: 'http://jumaydev.space:3000'
+  }
+  ));
+
 
 let tasks
 
@@ -26,8 +32,6 @@ async function main(){
 
 main().catch(console.error);
 
-app.use(cors({origin: 'http://jumaydev.space:3000'}));
-
 //Python connection modules
 const spawn = require("child_process").spawn;
 
@@ -47,34 +51,9 @@ let SVALUE = {
   tend: 100
 }
 
-// let fields =  [
-//     {"id": 0, "val": 4226.800251, "varb": "x", "measure": "km"}, 
-//     {"id": 1, "val": 3085.944251, "varb": "y", "measure": "km"}, 
-//     {"id": 2, "val": -4321.376266, "varb": "z", "measure": "km"},
-//     {"id": 3, "val": 0.593397, "varb": "vx", "measure": "km/sec"},
-//     {"id": 4, "val": 5.793711, "varb": "vy", "measure": "km/sec"},
-//     {"id": 5, "val": 4.948645, "varb": "vz", "measure": "km/sec"},
-//     {"id": 6, "val": 0, "varb": "tstart", "measure": "sec"},
-//     {"id": 7, "val": 0.1, "varb": "dt", "measure": "sec"},
-//     {"id": 8, "val": 2, "varb": "tend", "measure": "sec"} 
-//         ]
-
-// let tasks = [
-//   {id: 0, title: "Расчет маневра", subtitle: "Кватернионы", text: "Описание задачи будет реализовано здесь", fields},
-//   {"id": 1, "title": "Название задачи", "subtitle": "Тип матаппарата", "text": "Описание задачи будет реализовано здесь"},
-//   {id: 2, title: "Название задачи", subtitle: "Тип матаппарата", text: "Описание задачи будет реализовано здесь"},
-//   {id: 3, title: "Название задачи", subtitle: "Тип матаппарата", text: "Описание задачи будет реализовано здесь"},
-//   {id: 4, title: "Название задачи", subtitle: "Тип матаппарата", text: "Описание задачи будет реализовано здесь"},
-//   {id: 5, title: "Название задачи", subtitle: "Тип матаппарата", text: "Описание задачи будет реализовано здесь"},
-//   {id: 6, title: "Название задачи", subtitle: "Тип матаппарата", text: "Описание задачи будет реализовано здесь"},
-//   {id: 7, title: "Название задачи", subtitle: "Тип матаппарата", text: "Описание задачи будет реализовано здесь"},
-// ];
-
-
 app.use(express.json())
 
 // GET's
-
 app.get('/api/tasks', (req, res) => {
   let timeNow = currentTime()
   debug && console.log('GET tasks in ', timeNow)
