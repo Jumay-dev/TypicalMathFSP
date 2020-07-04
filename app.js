@@ -26,7 +26,7 @@ async function main(){
 
 main().catch(console.error);
 
-app.use(cors({origin: 'http://jumaydev.space/'}));
+app.use(cors({origin: '37.140.192.227:3000'}));
 
 //Python connection modules
 const spawn = require("child_process").spawn;
@@ -78,13 +78,14 @@ app.use(express.json())
 app.get('/api/tasks', (req, res) => {
   let timeNow = currentTime()
   debug && console.log('GET tasks in ', timeNow)
-
+  main().catch(console.error)
   res.status(200).json(tasks)
 })
 
 app.get('/api/fields', (req, res) => {
   let timeNow = currentTime()
-  debug && console.log('GET fields in ', timeNow)
+  let IP = req.connection.remoteAddress;
+  debug && console.log('GET fields in ', timeNow, ' from: ', IP)
   main().catch(console.error);
   res.status(200).json(tasks[0].fields)
 })
