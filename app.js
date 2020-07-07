@@ -1,18 +1,15 @@
 const express = require('express')
 const path = require('path')
 const { json } = require('express')
-const app = express()
+let app = express()
 var cors = require('cors')
 
 var whiteList =['http://jumaydev.space', 'http://jumaydev.space:3000', '37.140.192.227', '37.140.192.227:3000', 
               'http://37.140.192.227', 'http://37.140.192.227:3000']
 
-// app.use(cors(
-//   {
-//     origin: 'http://jumaydev.space'
-//   }
-//   ));
+app.use(cors())
 
+app.options('*', cors())
 
 let tasks
 
@@ -61,9 +58,9 @@ app.get('/api/tasks', (req, res) => {
   let timeNow = currentTime()
   debug && console.log('GET tasks in ', timeNow)
   main().catch(console.error)
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', '*');
-  res.setHeader('Access-Control-Allow-Headers', 'origin, content-type, accept');
+  // res.setHeader('Access-Control-Allow-Origin', '*');
+  // res.setHeader('Access-Control-Allow-Methods', '*');
+  // res.setHeader('Access-Control-Allow-Headers', 'origin, content-type, accept');
   res.status(200).json(tasks)
 })
 
