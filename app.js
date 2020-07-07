@@ -62,6 +62,7 @@ app.get('/api/tasks', (req, res) => {
   debug && console.log('GET tasks in ', timeNow)
   main().catch(console.error)
   res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', '*');
   res.setHeader('Access-Control-Allow-Headers', 'origin, content-type, accept');
   res.status(200).json(tasks)
 })
