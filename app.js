@@ -5,10 +5,6 @@ let app = express()
 var cors = require('cors')
 
 
-// app.use(cors())
-
-// app.options('*', cors())
-
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*')
   res.header('Access-Control-Allow-Headers', '*')
@@ -66,9 +62,9 @@ app.get('/api/tasks', (req, res) => {
   let timeNow = currentTime()
   debug && console.log('GET tasks in ', timeNow)
   main().catch(console.error)
-  // res.setHeader('Access-Control-Allow-Origin', '*');
-  // res.setHeader('Access-Control-Allow-Methods', '*');
-  // res.setHeader('Access-Control-Allow-Headers', 'origin, content-type, accept');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', '*');
+  res.setHeader('Access-Control-Allow-Headers', 'origin, content-type, accept');
   res.status(200).json(tasks)
 })
 
@@ -91,9 +87,6 @@ app.post('/api/contacts', (req, res) => {
     result = function pythonCall(SVALUE) {
       const pythonProcess = spawn('python',["./model/main.py", JSON.stringify(SVALUE)]);
       pythonProcess.stdout.on('data', (data) => {
-        // let resValue = JSON.parse(data);
-        // res.status(200).json(data);
-        // debug && console.log(data.toString());
         return res.send(JSON.stringify(data.toString()));
       });
     }(val)
@@ -108,12 +101,5 @@ function currentTime() {
   Seconds = Data.getSeconds();
   return Hour + ':' + Minutes + ':' + Seconds
 }
-
-
-// app.use(express.static(path.resolve(__dirname, 'client')))
-
-// app.get('*', (req, res) => {
-//   res.sendFile(path.resolve(__dirname, '@/client', 'index.html'))
-// })
 
 app.listen(3000, () => console.log('Server has been started on port 3000'))
