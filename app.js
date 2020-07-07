@@ -4,12 +4,20 @@ const { json } = require('express')
 let app = express()
 var cors = require('cors')
 
-var whiteList =['http://jumaydev.space', 'http://jumaydev.space:3000', '37.140.192.227', '37.140.192.227:3000', 
-              'http://37.140.192.227', 'http://37.140.192.227:3000']
 
-app.use(cors())
+// app.use(cors())
 
-app.options('*', cors())
+// app.options('*', cors())
+
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*')
+  res.header('Access-Control-Allow-Headers', '*')
+  if (req.method === 'OPTIONS') {
+    res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET')
+    return res.status(200).json({ })
+  }
+  next()
+})
 
 let tasks
 
